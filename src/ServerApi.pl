@@ -3,15 +3,14 @@
 :- use_module(library(http/http_error)).
 :- use_module(library(debug)).
 
-%%	Routing:
+%% Routing:
 :- http_handler(/, getRequest, []).
 
 
 %% Request handlers:
 getRequest(_) :-
 	format('Content-type: text/plain~n~n'),
-    format('Hello World!~n').
-	%% write(Request).
+	format('Hello World!~n').
 
 %% Server init
 start :-
