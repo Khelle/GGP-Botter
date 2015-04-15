@@ -1,16 +1,25 @@
 :- use_module(library(http/thread_httpd)).
 :- use_module(library(http/http_dispatch)).
 :- use_module(library(http/http_error)).
+:- use_module(library(http/http_parameters)).
+:- use_module(library(http/json)).
+:- use_module(library(http/json_convert)).
+:- use_module(library(http/http_json)).
 :- use_module(library(debug)).
+
+:- json_object jRequest(param:text).
 
 %% Routing:
 :- http_handler(/, getRequest, []).
 
 
 %% Request handlers:
-getRequest(_) :-
-	format('Content-type: text/plain~n~n'),
-	format('Hello World!~n').
+getRequest(Request) :-
+	http_parameters(Request, [
+		param(Param, [ optional(true), default('No param') ])
+	]),
+	prolog_to_json(jRequest(Param), Response),
+	reply_json(Response).
 
 %% Server init
 start :-
