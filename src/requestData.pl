@@ -1,16 +1,24 @@
-:- module(requestDataParser, [parseRequest/3]).
+:- module(requestData, [parseRequest/3]).
 
+%% Parses request data into atoms
+% Action 	- a textual atom:
+%				['INFO', 'START', 'ABORT', 'PLAY', 'STOP']
+% Data 		- a list of parameter strings:
+% 				[Action, GameId, Role, Rules, StartClock, PlayClock, Move]
 parseRequest(RequestData, Action, Data) :-
 	stripParenthesis(RequestData, StrippedData),
 	getAction(StrippedData, Action),
 	getDataList(Action, StrippedData, Data).
 
+%% Remove parenthesis from request string (eg. "( INFO )" --> "INFO")
 stripParenthesis(Data, Stripped) :-
 	sub_string(Data, 2, _, 2, Substring),
 	atom_string(Stripped, Substring).
 
+%% Retrieve Action from Data string
 getAction(Data, Action) :- atomic_list_concat([Action|_], ' ', Data).
 
+%% Retrieve parameters list from Data string
 getDataList('INFO', _, ['INFO']).
 getDataList('ABORT', Data, [Action, GameId]) :- atomic_list_concat([Action, GameId], ' ', Data).
 getDataList('PLAY', Data, [Action, GameId, Move]) :-
@@ -24,6 +32,7 @@ getDataList('START', Data, [Action, GameId, Role, Rules, StartClock, PlayClock])
 	getRulesAndClocks(DataTail, RulesList, StartClock, PlayClock),
 	atomic_list_concat(RulesList, ' ', Rules).
 
+%% Returns list of rules parts and game clocks
 getRulesAndClocks([StartClock, PlayClock], [], StartClock, PlayClock).
 getRulesAndClocks([DataHead | DataTail], [DataHead|RulesList], StartClock, PlayClock) :-
 	getRulesAndClocks(DataTail, RulesList, StartClock, PlayClock).

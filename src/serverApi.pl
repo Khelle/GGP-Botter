@@ -1,14 +1,20 @@
+:- module(serverApi, [start/0]).
+
 :- use_module(library(http/thread_httpd)).
 :- use_module(library(http/http_dispatch)).
 :- use_module(library(http/http_client)).
 
-:- use_module(requestDataParser).
+:- use_module(parametersReader).
+:- use_module(requestData).
 
 %% Routing:
 :- http_handler(root(.), getRequest, []).
 
 %% Server init - entry point to application
-start :- runServer(9147).
+start :-
+	parametersReader:parseParameters,
+	parametersReader:parameters(Port),
+	runServer(Port).
 
 %% Action handlers (currently doing nothing)
 handleRequest('INFO', _, Response) :- Response = 'available'.
@@ -26,7 +32,7 @@ handleRequest(_, _, Response) :- Response = 'nil'.
 %% Request handlers:
 getRequest(Request) :-
 	http_read_data(Request, RequestData, []),
-	requestDataParser:parseRequest(RequestData, Action, Data),
+	requestData:parseRequest(RequestData, Action, Data),
 	handleRequest(Action, Data, Response),
 	formatResponse(Response).
     
