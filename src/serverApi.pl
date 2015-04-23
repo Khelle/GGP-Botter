@@ -20,7 +20,7 @@ start :-
 handleRequest(['INFO'|_], Response) :- Response = 'available'.
 handleRequest(['START'|_], Response) :- Response = 'ready'.
 handleRequest(['PLAY'|_], Response) :- Response = 'nil'.
-handleRequest(['PLAY'|_], Response) :- Response = 'ready'.
+handleRequest(['STOP'|_], Response) :- Response = 'ready'.
 handleRequest(['ABORT'|_], Response) :- Response = 'aborted'.
 
 % Do we want to handle this case?
