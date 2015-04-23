@@ -1,11 +1,10 @@
-:- module(requestData, [parseRequest/3]).
+:- module(requestData, [parseRequest/2]).
 
 %% Parses request data into atoms
-% Action 	- a textual atom:
-%				['INFO', 'START', 'ABORT', 'PLAY', 'STOP']
 % Data 		- a list of parameter strings:
 % 				[Action, GameId, Role, Rules, StartClock, PlayClock, Move]
-parseRequest(RequestData, Action, Data) :-
+% 					Action 	- a textual atom: ['INFO', 'START', 'ABORT', 'PLAY', 'STOP']
+parseRequest(RequestData, Data) :-
 	stripParenthesis(RequestData, StrippedData),
 	getAction(StrippedData, Action),
 	getDataList(Action, StrippedData, Data).
