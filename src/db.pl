@@ -1,6 +1,9 @@
 :- module(db, [
- 	add/1, remove/1, removeall/1
+ 	add/1,
+ 	addList/1,
+ 	remove/1
 ]).
+:- dynamic(record/2).
 
 %% operator definitions
 &(X, Y) :-
@@ -12,12 +15,25 @@
 %% helper functions for buidling knowledge representation
 %% add term to knowledge
 add(T) :-
+	functor(T, N, A),
+	dynamic(N/A),
+	\+(T),
+	!, 
+	assertz(record(N, A)),
  	assertz(T).
+
+%% add multiple terms to knowledge
+addList([]).
+addList([H|T]) :-
+	add(H),
+ 	addList(T),
+ 	!.
   
-%% remove term from knowledge
+%% remove term(s) from knowledge
 remove(T) :-
- 	retract(T).
-  
-%% remove all terms with given head=H from knowledge
-removeall(H) :-
- 	retractall(H).
+	functor(T, N, A),
+	dynamic(N/A),
+ 	retractall(T).
+
+%% erase database
+erase.

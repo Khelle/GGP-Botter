@@ -1,0 +1,48 @@
+role(robot).
+base(cell(a)).
+base(cell(b)).
+base(cell(c)).
+base(cell(d)).
+base(gold(a)).
+base(gold(b)).
+base(gold(c)).
+base(gold(d)).
+base(gold(i)).
+base(step(1)).
+base(step(X)) :- succ(Y,X).
+input(robot,move).
+input(robot,grab).
+input(robot,drop).
+init(cell(a)).
+init(gold(c)).
+init(step(1)).
+next(cell(Y)) :- does(robot,move),true(cell(X)),adjacent(X,Y).
+next(cell(X)) :- does(robot,grab),true(cell(X)).
+next(cell(X)) :- does(robot,drop),true(cell(X)).
+next(gold(X)) :- does(robot,move),true(gold(X)).
+next(gold(i)) :- does(robot,grab),true(cell(X)),true(gold(X)).
+next(gold(i)) :- does(robot,grab),true(gold(i)).
+next(gold(Y)) :- does(robot,grab),true(cell(X)),true(gold(Y)),distinct(X,Y).
+next(gold(X)) :- does(robot,drop),true(cell(X)),true(gold(i)).
+next(gold(X)) :- does(robot,drop),true(gold(X)),distinct(X,i).
+next(step(Y)) :- true(step(X)),succ(X,Y).
+adjacent(a,b).
+adjacent(b,c).
+adjacent(c,d).
+adjacent(d,a).
+succ(1,2).
+succ(2,3).
+succ(3,4).
+succ(4,5).
+succ(5,6).
+succ(6,7).
+succ(7,8).
+succ(8,9).
+succ(9,10).
+legal(robot,move) :- succ(1,2).
+legal(robot,grab) :- true(cell(X)),true(gold(X)).
+legal(robot,drop) :- true(gold(i)).
+goal(robot,100) :- true(gold(a)).
+goal(robot,0) :- true(gold(X)),distinct(X,a).
+terminal :- true(step(10)).
+terminal :- true(gold(a)).

@@ -1,5 +1,5 @@
 :- module(botter, [
-	start/0,
+	%% start/0,
 	findroles/1,
 	findpropositions/1,
 	findactions/2,
@@ -26,18 +26,30 @@
 ~(X) :-
  	not(call(X)).
 
-%% start program and test db module
-start :-
-	db:add(kobieta(kasia)),
-	db:add(kobieta(justyna)),
-	db:add(mezczyzna(kamil)),
-	db:add(mezczyzna(rafal)),
-	db:add(programuje(kasia)),
-	db:add(programuje(kamil)),
-	db:add(osoba(X) :- kobieta(X); mezczyzna(X)),
-	db:add(przedmiot(X) :- ~osoba(X)),
-	db:add(programista(X) :- programuje(X) & mezczyzna(X)),
-	db:add(programistka(X) :- programuje(X) & kobieta(X)).
+%% writeLine to stream Out
+writeLine(_,[]).
+writeLine(Out,[Ln|L]) :-
+	write(Out,Ln),
+	nl(Out),
+	writeLine(Out,L),
+	!.
+
+%% write list of lines L into file File
+writeFile(File,L) :-
+	open(File,write,Out),
+	writeLine(Out,L),
+	close(Out).
+
+%% readLine from stream In and return list of lines L
+readLine(In,[Ta|T]) :-
+	read_term(In,Ta,[]),
+	( Ta == end_of_file -> !; readLine(In,T) ).
+
+%% readFile File and returns list of lines L
+readFile(File,L) :-
+	open(File,read,In),
+	readLine(In,L),
+	close(In).
 
 %% returns a sequence of roles.
 findroles(Game) :- true.
