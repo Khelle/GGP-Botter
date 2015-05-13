@@ -2,16 +2,10 @@
  	add/1,
  	addList/1,
  	remove/1,
-    init/0
+    init/0,
+    distinct/2
 ]).
 :- dynamic(record/2).
-
-%% operator definitions
-&(X, Y) :-
- 	call(X), call(Y).
-
-~(X) :-
- 	not(call(X)).
 
 %% helper functions for buidling knowledge representation
 %% add term to knowledge
@@ -47,3 +41,5 @@ init :-
 setInitialState :- forall(db:base(T), assertz(db:true(T))).
 
 setDoes :- forall(db:legal(Role, Action), assertz(db:does(Role, Action))).
+
+distinct(X,Y) :- X \= Y.

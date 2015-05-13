@@ -1,5 +1,4 @@
 :- module(botter, [
-	%% start/0,
 	isRole/1,
 	findPropositions/1,
 	findActions/2,
@@ -8,23 +7,15 @@
 	findAllLegal/3,
 	findNext/4,
 	findReward/3,
-	isTerminal/2
+	isTerminal/2,
+	writeLine/2,
+	writeFile/2,
+	readLine/2,
+	readFile/2,
+	parseGDL/2
 ]).
+:- use_module(library(unix)).
 :- use_module(db).
-
-%% TODO remove this!!!
-:- style_check(-singleton).
-
-%% operator declarations
-:- op(950,xfy,&).
-:- op(500,fy,~).
-
-%% operator definitions
-&(X, Y) :-
- 	call(X), call(Y).
-
-~(X) :-
- 	not(call(X)).
 
 %% writeLine to stream Out
 writeLine(_,[]).
@@ -51,11 +42,10 @@ readFile(File,L) :-
 	readLine(In,L),
 	close(In).
 
-setInitialState :-
-	forall(db:base(T), assertz(db:true(T))).
-
-clearCurrentState :-
-	retractall(db:true(_)).
+parseGDL(Text,L) :-
+	writeFile('../data/streamIn', [ Text ]),
+	exec(node('../exec.js', '../data/streamIn', '../data/streamOut')),
+	readFile('../data/streamout', L).
 
 %% returns a sequence of roles.
 isRole(Role) :- db:role(Role).
@@ -64,7 +54,7 @@ isRole(Role) :- db:role(Role).
 findPropositions(Game) :- true.
 
 %% returns a sequence of actions for a specified role.
-findActions(Role,Game) :- true.
+findActions(Role, Actions) :- setof(Action, db:legal(Role, Action), Actions).
 
 %%  returns a sequence of all propositions that are true in the initial state.
 isInit(Init) :- db:init(Init).
