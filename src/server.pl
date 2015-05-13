@@ -19,8 +19,8 @@ start :-
 
 %% Action handlers (currently doing nothing)
 handleRequest(['INFO'|_], Response) :- Response = 'available'.
-%% handleRequest(['START', _, _, Rules | _], Response) :- botter:saveRules(Rules), Response = 'ready'.
-handleRequest(['START',_], Response) :- Response = 'ready'.
+handleRequest(['START', _, _, Rules | _], Response) :- botter:saveRules(Rules), Response = 'ready'.
+%% handleRequest(['START',_], Response) :- Response = 'ready'.
 handleRequest(['PLAY'|_], Response) :- Response = 'nil'.
 handleRequest(['STOP'|_], Response) :- Response = 'ready'.
 handleRequest(['ABORT'|_], Response) :- Response = 'aborted'.

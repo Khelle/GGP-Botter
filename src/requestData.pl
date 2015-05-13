@@ -5,13 +5,13 @@
 % 				[Action, GameId, Role, Rules, StartClock, PlayClock, Move]
 % 					Action 	- a textual atom: ['INFO', 'START', 'ABORT', 'PLAY', 'STOP']
 parseRequest(RequestData, Data) :-
-	stripParenthesis(RequestData, 2, StrippedData),
+	stripParenthesis(RequestData, StrippedData),
 	getAction(StrippedData, Action),
 	getDataList(Action, StrippedData, Data).
 
 %% Remove parenthesis from request string (eg. "( INFO )" --> "INFO")
-stripParenthesis(Data, Chars, Stripped) :-
-	sub_string(Data, Chars, _, Chars, Substring),
+stripParenthesis(Data, Stripped) :-
+	sub_string(Data, 2, _, 2, Substring),
 	atom_string(Stripped, Substring).
 
 %% Retrieve Action from Data string
@@ -29,8 +29,7 @@ getDataList('STOP', Data, [Action, GameId, Move]) :-
 getDataList('START', Data, [Action, GameId, Role, Rules, StartClock, PlayClock]) :-
 	atomic_list_concat([Action, GameId, Role | DataTail], ' ', Data),
 	getRulesAndClocks(DataTail, RulesList, StartClock, PlayClock),
-	atomic_list_concat(RulesList, ' ', RulesString),
-	stripParenthesis(RulesString, 1, Rules).
+	atomic_list_concat(RulesList, ' ', Rules).
 
 %% Returns list of rules parts and game clocks
 getRulesAndClocks([StartClock, PlayClock], [], StartClock, PlayClock).
