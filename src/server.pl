@@ -1,4 +1,4 @@
-:- module(serverApi, [start/0]).
+:- module(server, [start/0]).
 
 :- use_module(library(http/thread_httpd)).
 :- use_module(library(http/http_dispatch)).
@@ -35,7 +35,7 @@ getRequest(Request) :-
 	requestData:parseRequest(RequestData, Data),
 	handleRequest(Data, Response),
 	formatResponse(Response).
-    
+
 formatResponse(Response) :-
 	format('Content-type: text/acl~n~n'),
     format(Response).
