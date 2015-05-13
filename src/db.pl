@@ -2,8 +2,9 @@
  	add/1,
  	addList/1,
  	remove/1,
-    init/0,
-    distinct/2
+    distinct/2,
+    backupState/0,
+    revertState/0
 ]).
 :- dynamic(record/2).
 
@@ -34,12 +35,22 @@ remove(T) :-
 erase.
 
 %% game rules additions
-init :-
-    setInitialState,
-    setDoes.
+setState(Propositions) :-
+    retractall(db:true(_)),
+    setStateLoop(Propositions).
+setStateLoop([]).
+setStateLoop([P|Propositions]) :-
+    assertz(db:true(P)),
+    setStateLoop(Propositions).
 
-setInitialState :- forall(db:base(T), assertz(db:true(T))).
+backupState :-
+    retractall(db:bkpState(_)),
+    forall(db:true(T), assertz(bkpState(T))).
+revertState :-
+    retractall(db:true(_)),
+    forall(db:bkpState(T), assertz(true(T))).
 
-setDoes :- forall(db:legal(Role, Action), assertz(db:does(Role, Action))).
+setMove(Role, Move) :- assertz(does(Role, Move)).
+clearMoves(Role) :- retractall(does(Role, _)).
 
 distinct(X,Y) :- X \= Y.
