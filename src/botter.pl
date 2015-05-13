@@ -1,14 +1,14 @@
 :- module(botter, [
 	%% start/0,
-	findroles/1,
-	findpropositions/1,
-	findactions/2,
-	findinits/1,
-	findlegalx/3,
-	findlegals/3,
-	findnext/4,
-	findreward/3,
-	findterminalp/2
+	isRole/1,
+	findPropositions/1,
+	findActions/2,
+	findInits/1,
+	findFirstLegal/3,
+	findAllLegal/3,
+	findNext/4,
+	findReward/3,
+	isTerminal/2
 ]).
 :- use_module(db).
 
@@ -22,7 +22,7 @@
 %% operator definitions
 &(X, Y) :-
  	call(X), call(Y).
-  
+
 ~(X) :-
  	not(call(X)).
 
@@ -51,29 +51,35 @@ readFile(File,L) :-
 	readLine(In,L),
 	close(In).
 
+setInitialState :-
+	forall(db:base(T), assertz(db:true(T))).
+
+clearCurrentState :-
+	retractall(db:true(_)).
+
 %% returns a sequence of roles.
-findroles(Game) :- true.
+isRole(Role) :- db:role(Role).
 
 %% returns a sequence of propositions.
-findpropositions(Game) :- true.
+findPropositions(Game) :- true.
 
 %% returns a sequence of actions for a specified role.
-findactions(Role,Game) :- true.
+findActions(Role,Game) :- true.
 
 %%  returns a sequence of all propositions that are true in the initial state.
-findinits(Game) :- true.
+findInits(Game) :- true.
 
 %% returns the first action that is legal for the specified role in the specified state.
-findlegalx(Role,State,Game) :- true.
+findFirstLegal(Role,State,Game) :- true.
 
 %% returns a sequence of all actions that are legal for the specified role in the specified state.
-findlegals(Role,State,Game) :- true.
+findAllLegal(Role,State,Game) :- true.
 
 %% returns a sequence of all propositions that are true in the state that results from the specified roles performing the specified move in the specified state.
-findnext(Roles,Move,State,Game) :- true.
+findNext(Roles,Move,State,Game) :- true.
 
 %% returns the goal value for the specified role in the specified state.
-findreward(Role,State,Game) :- true.
+findReward(Role,State,Game) :- true.
 
 %% returns a boolean indicating whether the specified state is terminal.
-findterminalp(State,Game) :- true.
+isTerminal(State,Game) :- true.

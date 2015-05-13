@@ -44,3 +44,6 @@ runServer(Port) :-
 	format('~nStarting player...~n'),
 	http_server(http_dispatch, [port(Port)]),
 	format('Player ready!~n~n').
+
+post(Address, Data) :-
+	http_post(Address, Data, _, []).
