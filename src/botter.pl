@@ -3,7 +3,7 @@
 	isRole/1,
 	findPropositions/1,
 	findActions/2,
-	findInits/1,
+	isInit/1,
 	findFirstLegal/3,
 	findAllLegal/3,
 	findNext/4,
@@ -67,7 +67,7 @@ findPropositions(Game) :- true.
 findActions(Role,Game) :- true.
 
 %%  returns a sequence of all propositions that are true in the initial state.
-findInits(Game) :- true.
+isInit(Init) :- db:init(Init).
 
 %% returns the first action that is legal for the specified role in the specified state.
 findFirstLegal(Role,State,Game) :- true.
