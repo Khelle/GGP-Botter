@@ -48,6 +48,10 @@ parseGDL(Text,L) :-
 	exec(node('../exec.js', '../data/streamIn', '../data/streamOut')),
 	readFile('../data/streamout', L).
 
+saveRules(Rules) :-
+	parseGDL(Rules, L),
+	db:add(L).
+
 %% sets initial state
 setInitialState :-
 	findInitialState(State),
