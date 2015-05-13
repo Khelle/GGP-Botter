@@ -1,5 +1,9 @@
 :- module(botter, [
-	%% start/0,
+	writeLine/2,
+	writeFile/2,
+	readLine/2,
+	readFile/2,
+	parseGDL/2,
 	findroles/1,
 	findpropositions/1,
 	findactions/2,
@@ -10,21 +14,8 @@
 	findreward/3,
 	findterminalp/2
 ]).
+:- use_module(library(unix)).
 :- use_module(db).
-
-%% TODO remove this!!!
-:- style_check(-singleton).
-
-%% operator declarations
-:- op(950,xfy,&).
-:- op(500,fy,~).
-
-%% operator definitions
-&(X, Y) :-
- 	call(X), call(Y).
-  
-~(X) :-
- 	not(call(X)).
 
 %% writeLine to stream Out
 writeLine(_,[]).
@@ -50,6 +41,11 @@ readFile(File,L) :-
 	open(File,read,In),
 	readLine(In,L),
 	close(In).
+
+parseGDL(Text,L) :-
+	writeFile('../data/streamIn', [ Text ]),
+	exec(node('../exec.js', '../data/streamIn', '../data/streamOut')),
+	readFile('../data/streamout', L).
 
 %% returns a sequence of roles.
 findroles(Game) :- true.

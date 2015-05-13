@@ -5,13 +5,6 @@
 ]).
 :- dynamic(record/2).
 
-%% operator definitions
-&(X, Y) :-
- 	call(X), call(Y).
-  
-~(X) :-
- 	not(call(X)).
-
 %% helper functions for buidling knowledge representation
 %% add term to knowledge
 add(T) :-
