@@ -114,7 +114,9 @@ Clauses
 	;
 
 ProgramBody 
-	: IDENTIFIER IDENTIFIER CONSTANT '(' ')' NUMBER NUMBER							{ $$ = null; }
+	: '(' ')'																		{ $$ = null; }
+	| '(' Clauses ')'																{ $$ = $2; }
+	| IDENTIFIER IDENTIFIER CONSTANT '(' ')' NUMBER NUMBER							{ $$ = null; }
 	| IDENTIFIER IDENTIFIER CONSTANT '(' Clauses ')' NUMBER NUMBER			  		{ $$ = $5; }
 	;
 
