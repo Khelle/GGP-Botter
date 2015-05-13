@@ -9,6 +9,4 @@ exec('node gdl.js ' + inPath + ' > ' + outPath, {cwd: cwd}, function(error, stdo
     	console.log('exec error: ' + error);
     	return;
     }
-
-   	console.log('DONE');
 });
