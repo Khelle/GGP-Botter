@@ -45,7 +45,7 @@ readFile(File,L) :-
 
 parseGDL(Text,L) :-
 	writeFile('../data/streamIn', [ Text ]),
-	exec(node('../exec.js', '../data/streamIn', '../data/streamOut')),
+	exec(node('../gdl/exec.js', '../data/streamIn', '../data/streamOut')),
 	readFile('../data/streamout', L).
 
 saveRules(Rules) :-
