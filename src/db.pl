@@ -21,7 +21,9 @@ add(T) :-
 %% add multiple terms to knowledge
 addList([]).
 addList([H|T]) :-
-	add(H),
+    atom_codes(A, H),
+    term_to_atom(Term, A),
+	add(Term),
  	addList(T),
  	!.
 

@@ -17,6 +17,7 @@
 ]).
 :- use_module(library(unix)).
 :- use_module(db).
+:- use_module(gdlParser).
 
 %% writeLine to stream Out
 writeLine(_,[]).
@@ -49,8 +50,13 @@ parseGDL(Text,L) :-
 	readFile('../data/streamout', L).
 
 saveRules(Rules) :-
-	parseGDL(Rules, L),
-	db:add(L).
+	split_string(Rules, "\n", "", R),
+	gdlParser:gdlPrefixLinesToInfixLines(R, L),
+	db:addList(L).
+
+testRules :-
+	gdlParser:testParse(R),
+	db:addList(R).
 
 %% sets initial state
 setInitialState :-
