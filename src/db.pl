@@ -1,10 +1,7 @@
 :- module(db, [
  	add/1,
  	addList/1,
- 	remove/1,
-    distinct/2,
-    backupState/0,
-    revertState/0
+ 	remove/1
 ]).
 :- dynamic(record/2).
 
@@ -21,9 +18,7 @@ add(T) :-
 %% add multiple terms to knowledge
 addList([]).
 addList([H|T]) :-
-    atom_codes(A, H),
-    term_to_atom(Term, A),
-	add(Term),
+	add(H),
  	addList(T),
  	!.
 
@@ -35,24 +30,3 @@ remove(T) :-
 
 %% erase database
 erase.
-
-%% game rules additions
-setState(Propositions) :-
-    retractall(db:true(_)),
-    setStateLoop(Propositions).
-setStateLoop([]).
-setStateLoop([P|Propositions]) :-
-    assertz(db:true(P)),
-    setStateLoop(Propositions).
-
-backupState :-
-    retractall(db:bkpState(_)),
-    forall(db:true(T), assertz(bkpState(T))).
-revertState :-
-    retractall(db:true(_)),
-    forall(db:bkpState(T), assertz(true(T))).
-
-setMove(Role, Move) :- assertz(does(Role, Move)).
-clearMoves(Role) :- retractall(does(Role, _)).
-
-distinct(X,Y) :- X \= Y.

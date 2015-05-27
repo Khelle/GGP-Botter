@@ -4,22 +4,22 @@
 :- use_module(library(http/http_dispatch)).
 :- use_module(library(http/http_client)).
 
-:- use_module(parametersReader).
+:- use_module(parameters).
 :- use_module(requestData).
-:- use_module(botter).
+:- use_module(rules).
 
 %% Routing:
 :- http_handler(root(.), getRequest, []).
 
 %% Server init - entry point to application
 start :-
-	parametersReader:parseParameters,
-	parametersReader:parameters(Port),
+	parameters:parse,
+	parameters:params(Port, _),
 	runServer(Port).
 
 %% Action handlers (currently doing nothing)
 handleRequest(['INFO'|_], Response) :- Response = 'available'.
-handleRequest(['START', _, _, Rules | _], Response) :- botter:saveRules(Rules), Response = 'ready'.
+handleRequest(['START', _, _, Rules | _], Response) :- rules:save(Rules), Response = 'ready'.
 %% handleRequest(['START',_], Response) :- Response = 'ready'.
 handleRequest(['PLAY'|_], Response) :- Response = 'nil'.
 handleRequest(['STOP'|_], Response) :- Response = 'ready'.
