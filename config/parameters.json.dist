@@ -1,5 +1,5 @@
 {
 	"port": 9147,
-    "bot": "bot_random",
+    "bot_file": "random.pl",
     "bots_dir": "bot"
 }

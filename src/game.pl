@@ -1,4 +1,8 @@
 :- module(game, [
+    findGameId/1,
+    findMyRole/1,
+    findStartClock/1,
+    findPlayClock/1,
     findRoles/1,
     findPropositions/1,
     findActions/2,
@@ -13,6 +17,19 @@
 
 :- use_module(db).
 :- use_module(state).
+
+:- dynamic(game_id/1).
+:- dynamic(role/1).
+:- dynamic(start_clock/1).
+:- dynamic(play_clock/1).
+
+findGameId(GameId) :- game_id(GameId).
+
+findMyRole(Role) :- role(Role).
+
+findStartClock(Clock) :- start_clock(Clock).
+
+findPlayClock(Clock) :- play_clock(Clock).
 
 %% returns a sequence of roles.
 findRoles(Roles) :- setof(Role, db:role(Role), Roles).

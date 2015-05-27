@@ -3,9 +3,12 @@
 :- use_module(library(http/thread_httpd)).
 :- use_module(library(http/http_dispatch)).
 :- use_module(library(http/http_client)).
+:- use_module(library(debug)).
 
 :- use_module(parameters).
+:- use_module(botLoader).
 :- use_module(requestData).
+:- use_module(requestHandler).
 :- use_module(rules).
 
 %% Routing:
@@ -13,15 +16,21 @@
 
 %% Server init - entry point to application
 start :-
+	debug(request),
 	parameters:parse,
-	parameters:params(Port, _),
+	parameters:params(Port, BotFile, BotDir),
+	botLoader:load(BotDir, BotFile),
 	runServer(Port).
 
-%% Action handlers (currently doing nothing)
+%% Action handlers
 handleRequest(['INFO'|_], Response) :- Response = 'available'.
-handleRequest(['START', _, _, Rules | _], Response) :- rules:save(Rules), Response = 'ready'.
-%% handleRequest(['START',_], Response) :- Response = 'ready'.
-handleRequest(['PLAY'|_], Response) :- Response = 'nil'.
+handleRequest(['START', GameId, Role, Rules, StartClock, PlayClock], Response) :-
+	requestHandler:handleStart(GameId, Role, Rules, StartClock, PlayClock),
+	Response = 'ready'.
+handleRequest(['PLAY', GameId, Moves], Response) :-
+	requestHandler:handlePlay(GameId, Moves, Played),
+	debug(request, 'Played:~n~p', [Played]),
+	Response = Played.
 handleRequest(['STOP'|_], Response) :- Response = 'ready'.
 handleRequest(['ABORT'|_], Response) :- Response = 'aborted'.
 

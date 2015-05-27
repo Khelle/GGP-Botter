@@ -30,3 +30,6 @@ remove(T) :-
 
 %% erase database
 erase.
+
+%% helper predicate - required to interpret the rules
+distinct(X,Y) :- X \= Y.

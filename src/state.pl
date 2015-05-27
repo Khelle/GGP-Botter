@@ -10,6 +10,9 @@
 
 :- use_module(db).
 :- use_module(game).
+:- use_module(gdlParser).
+
+:- use_module(library(debug)).
 
 %% sets initial state
 setInitial :-
@@ -17,11 +20,25 @@ setInitial :-
     setState(State).
 
 %% computes new state basing on moves performed by players
+compute('NIL').
 compute(Moves) :-
+    parseMoves(Moves, MovesList),
+    debug(request, 'Received moves: ~p', [MovesList]),
     game:findCurrentState(CurrentState),
     game:findRoles(Roles),
-    game:findNext(Roles, Moves, CurrentState, NextState),
-    setState(NextState).
+    game:findNext(Roles, MovesList, CurrentState, NextState),
+    setState(NextState),
+    debug(request, 'Computed new state...', []).
+
+parseMoves(InfixMoves, MovesList) :-
+    atom_string(InfixMoves, StringMoves),
+    split_string(StringMoves, "\n", "", M),
+    gdlParser:gdlPrefixLinesToInfixLines(M, ML),
+    maplist(prepareMove, ML, MovesList).
+
+prepareMove(In, Out) :-
+    split_string(In, "", ".", [Dotless]),
+    atom_string(Out, Dotless).
 
 %% saves and backups the new state in db
 setState(State) :-
