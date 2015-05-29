@@ -1,4 +1,4 @@
-#!swipl -f -q
+#!/usr/bin/swipl -f -q
 
 :- initialization run.
 
