@@ -7,7 +7,7 @@
 
 :- json_object params(bot_dir:atom).
 
-:- dynamic(params).
+:- dynamic(params/1).
 
 parse :-
 	open('../config/parameters.json', read, File),
