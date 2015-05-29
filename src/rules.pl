@@ -24,7 +24,23 @@ testRules :-
 	maplist(strToTerm, StringRules, TermRules),
 	db:addList(TermRules).
 
+%% load rules from specified file
+loadRulesFile(File) :-
+	readFile(File, Rules),
+	db:addList(Rules),
+	logger:log('rules', Rules, write).
+
 %% helper predicate - converts string to term
 strToTerm(S, T) :-
     atom_codes(A, S),
     term_to_atom(T, A).
+
+readLine(In,[Ta|T]) :-
+	read_term(In,Ta,[]),
+	( Ta == end_of_file -> !; readLine(In,T) ).
+
+%% readFile File and returns list of lines L
+readFile(File,L) :-
+	open(File,read,In),
+	readLine(In,L),
+	close(In).
