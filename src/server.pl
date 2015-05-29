@@ -16,6 +16,7 @@
 
 %% Server init - entry point to application
 start :-
+	%% tspy(game:findNext/4),
 	debug(request),
 	parameters:parse,
 	parameters:params(Port, BotFile, BotDir),

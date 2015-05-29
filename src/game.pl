@@ -52,7 +52,8 @@ findNext(Roles, Moves, State, Next) :- callWithState(State, findNextLoop(Roles, 
 findNextLoop([], [], Next) :- setof(P, db:next(P), Next).
 findNextLoop([R|Roles], [M|Moves], Next) :-
     debug(request, 'Roles: ~p~nMoves: ~p', [[R|Roles], [M|Moves]]),
-    state:setMove(R, M),
+    term_to_atom(T, M),
+    state:setMove(R, T),
     findNextLoop(Roles, Moves, Next),
     state:clearMoves(R).
 
