@@ -4,6 +4,7 @@
 
 :- use_module(db).
 :- use_module(gdlParser).
+:- use_module(logger).
 :- use_module(library(debug)).
 
 %% parses and saves Rules into the db

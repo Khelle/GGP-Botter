@@ -1,5 +1,7 @@
 :- module('logger', [
-    log/2
+    log/2,
+    log/3,
+    clear/1
 ]).
 
 log(Channel, Messages) :-

@@ -59,3 +59,6 @@ distinct(X,Y) :-
 %% helper predicate - required to interpret the rules
 or(X,Y) :-
     X,!;Y.
+
+or(X,Y,Z) :-
+	X,!;Y,!;Z.
