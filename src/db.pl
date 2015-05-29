@@ -14,12 +14,11 @@
 
 %% helper functions for buidling knowledge representation
 %% add term to knowledge
-add(T) :-
+add(Te) :-
+	getHead((Te),T),
 	functor(T, N, A),
 	(dynamic(N/A)),
-	\+(T),
-	!,
-	assertz(T),
+	assertz((Te)),
 	(record(N, A) -> true; assertz(record(N, A))).
 
 %% add multiple terms to knowledge
@@ -37,6 +36,13 @@ remove(T) :-
  	functor(Ts, N, A),
  	findall(_, Ts, L),
  	(length(L, 0) -> (retract(record(N, A)) -> !,true;true); true).
+
+getHead(T,H) :-
+	term_to_atom(T, X),
+	split_string(X, ":-", "", Y),
+	Y=[Hs|_],
+	atom_chars(S,Hs),
+	term_to_atom(H,S).
 
 removeFacts([]).
 removeFacts([H|T]) :-
