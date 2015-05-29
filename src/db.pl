@@ -30,7 +30,7 @@ remove(T) :-
  	retractall(T),
  	functor(Ts, N, A),
  	findall(_, Ts, L),
- 	(length(L, 0) -> retract(record(N, A)); true).
+ 	(length(L, 0) -> (retract(record(N, A)); true); true).
 
 %% erase database
 removeFacts([]).
