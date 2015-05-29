@@ -5,7 +5,7 @@
 :- use_module(library(http/json)).
 :- use_module(library(http/json_convert)).
 
-:- json_object params(port:integer, bot_file:atom, bot_dir:atom).
+:- json_object params(bot_dir:atom).
 
 :- dynamic(params).
 

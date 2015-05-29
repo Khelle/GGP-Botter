@@ -1,5 +1,3 @@
 {
-	"port": 9147,
-    "bot_file": "random.pl",
     "bots_dir": "bot"
 }

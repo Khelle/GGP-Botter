@@ -44,6 +44,11 @@ findCurrentState(State) :- findall(Init, db:true(Init), State).
 %% returns the first action that is legal for the specified role in the specified state.
 findFirstLegal(Role, State, Action) :- findAllLegal(Role, State, [Action|_]).
 
+%% returns a random action that is legal for the specified role in the specified state.
+findRandomLegal(Role, State, Action) :-
+    findAllLegal(Role, State, Actions),
+    randomElement(Actions, Action).
+
 %% returns a sequence of all actions that are legal for the specified role in the specified state.
 findAllLegal(Role, State, Actions) :- callWithState(State, setof(Action, db:legal(Role, Action), Actions)).
 
@@ -70,3 +75,9 @@ callWithState(State, T) :-
     !;              % and return true
     state:revertState, % no - clean up...
     fail.           % and return false
+
+randomElement([], []) :- fail.
+randomElement(List, Elt) :-
+    length(List, Length),
+    random(0, Length, Index),
+    nth0(Index, List, Elt).

@@ -1,5 +1,8 @@
 :- module(requestHandler, [
-    handleStart/5
+    handleStart/5,
+    handlePlay/3,
+    handleAbort/1,
+    handleStop/2
 ]).
 
 :- use_module(db).
@@ -9,14 +12,13 @@
 :- use_module(library(debug)).
 
 handleStart(GameId, Role, Rules, StartClock, PlayClock) :-
-    debug(request, 'Handle start', []),
+    resetGame,
     setGameInfo(GameId, Role, StartClock, PlayClock),
     rules:save(Rules),
     state:setInitial,
-    debug(request, 'Set initial state', []).
+    bot:start.
 
 handlePlay(_, Moves, Played) :-
-    debug(request, 'Handle play', []),
     state:compute(Moves),
     bot:play(Moved),
     Moved =.. List,
@@ -25,8 +27,19 @@ handlePlay(_, Moves, Played) :-
         atomic_list_concat(List, ' ', L1),
         atom_concat('( ', L1, L2), atom_concat(L2, ' )', Played)).
 
+handleAbort(_) :-
+    bot:abort.
+
+handleStop(_, Moves) :-
+    state:compute(Moves),
+    bot:stop.
+
 setGameInfo(GameId, Role, StartClock, PlayClock) :-
     db:add(game_game_id(GameId)),
     db:add(game_role(Role)),
     db:add(game_start_clock(StartClock)),
     db:add(game_play_clock(PlayClock)).
+
+resetGame :-
+    logger:clear('states'),
+    db:erase.

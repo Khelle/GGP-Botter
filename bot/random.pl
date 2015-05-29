@@ -10,9 +10,13 @@ play(Played) :-
     game:findCurrentState(State),
     debug(request, 'Current state:~n~p', [State]),
     (
-        game:findFirstLegal(Role, State, Played) ->
+        game:findRandomLegal(Role, State, Played) ->
         !,
         logger:log('states', ['Found legal move:', Played]);
         Played = 'nil',
         logger:log('states', ['Found no move'])
     ).
+
+start.
+abort.
+stop.

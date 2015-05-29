@@ -38,7 +38,6 @@ remove(T) :-
  	findall(_, Ts, L),
  	(length(L, 0) -> (retract(record(N, A)) -> !,true;true); true).
 
-%% erase database
 removeFacts([]).
 removeFacts([H|T]) :-
 	H = [X, Y],
@@ -46,6 +45,7 @@ removeFacts([H|T]) :-
 	removeFacts(T),
 	!.
 
+%% erase database
 erase :-
 	findall([X,Y], record(X,Y), L),
 	removeFacts(L),
@@ -53,5 +53,9 @@ erase :-
 	(dynamic(record/2)).
 
 %% helper predicate - required to interpret the rules
-distinct(X,Y) :- 
+distinct(X,Y) :-
 	X \= Y.
+
+%% helper predicate - required to interpret the rules
+or(X,Y) :-
+    X,!;Y.

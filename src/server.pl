@@ -1,4 +1,4 @@
-:- module(server, [start/0]).
+:- module(server, [start/2]).
 
 :- use_module(library(http/thread_httpd)).
 :- use_module(library(http/http_dispatch)).
@@ -15,13 +15,11 @@
 :- http_handler(root(.), getRequest, []).
 
 %% Server init - entry point to application
-start :-
-	%% tspy(game:findNext/4),
-	debug(request),
+start(Port, Bot) :-
+	%% debug(request),
 	parameters:parse,
-	parameters:params(Port, BotFile, BotDir),
-	botLoader:load(BotDir, BotFile),
-	logger:log('states', ['New game'], write),
+	parameters:params(BotDir),
+	botLoader:load(BotDir, Bot),
 	runServer(Port).
 
 %% Action handlers

@@ -1,6 +1,5 @@
 :- module(rules, [
-	save/1,
-	testRules/0
+	save/1
 ]).
 
 :- use_module(db).
@@ -15,20 +14,6 @@ save(Rules) :-
 	maplist(strToTerm, L, TermRules),
 	db:addList(TermRules),
 	logger:log('rules', L, write).
-
-%% loads test rules into db
-testRules :-
-	gdlParser:testParse(StringRules),
-	maplist(strToTerm, StringRules, TermRules),
-	db:addList(TermRules).
-
-loadTestGame :-
-	[game], [state], [botLoader],
-	rules:loadRulesFile('../CellPuzzle.pl'),
-	botLoader:load('bot', 'random'),
-	state:setInitial,
-	findRoles([R]),
-	db:add(game_role(R)).
 
 %% load rules from specified file
 loadRulesFile(File) :-
