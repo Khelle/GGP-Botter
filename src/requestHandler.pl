@@ -26,7 +26,7 @@ handlePlay(_, Moves, Played) :-
         atom_concat('( ', L1, L2), atom_concat(L2, ' )', Played)).
 
 setGameInfo(GameId, Role, StartClock, PlayClock) :-
-    db:add(game:game_id(GameId)),
-    db:add(game:role(Role)),
-    db:add(game:start_clock(StartClock)),
-    db:add(game:play_clock(PlayClock)).
+    db:add(game_game_id(GameId)),
+    db:add(game_role(Role)),
+    db:add(game_start_clock(StartClock)),
+    db:add(game_play_clock(PlayClock)).

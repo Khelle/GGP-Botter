@@ -32,7 +32,6 @@ compute(Moves) :-
     parseMoves(Moves, MovesList),
     debug(request, 'Received moves: ~p', [MovesList]),
     logger:log('states', ['Received moves:'|MovesList]),
-    %% logger:log('states', MovesList),
     game:findCurrentState(CurrentState),
     game:findRoles(Roles),
     game:findNext(Roles, MovesList, CurrentState, NextState),
@@ -66,12 +65,12 @@ setStateLoop([P|Propositions]) :-
 %% backups the current state
 backupState :-
     db:remove(state:bkpState(_)),
-    forall(db:true(T), db:add(state:bkpState(T))).
+    forall(db:true(T), db:add(state_bkpState(T))).
 
 %% reverts to the backed-up state
 revertState :-
     db:remove(true(_)),
-    forall(state:bkpState(T), db:add(true(T))).
+    forall(state_bkpState(T), db:add(true(T))).
 
 %% adds player's moves to the db
 setMove(Role, Move) :- db:add(does(Role, Move)).
