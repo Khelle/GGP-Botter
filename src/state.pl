@@ -64,7 +64,7 @@ setStateLoop([P|Propositions]) :-
 
 %% backups the current state
 backupState :-
-    db:remove(state:bkpState(_)),
+    db:remove(state_bkpState(_)),
     forall(db:true(T), db:add(state_bkpState(T))).
 
 %% reverts to the backed-up state
