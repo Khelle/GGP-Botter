@@ -1,7 +1,8 @@
 :- module(db, [
  	add/1,
  	addList/1,
- 	remove/1
+ 	remove/1,
+ 	erase/1
 ]).
 :- dynamic(record/2).
 
@@ -9,11 +10,11 @@
 %% add term to knowledge
 add(T) :-
 	functor(T, N, A),
-	dynamic(N/A),
+	(dynamic(N/A)),
 	\+(T),
 	!,
-	assertz(record(N, A)),
- 	assertz(T).
+	assertz(T),
+	(record(N, A) -> true; assertz(record(N, A))).
 
 %% add multiple terms to knowledge
 addList([]).
@@ -25,11 +26,26 @@ addList([H|T]) :-
 %% remove term(s) from knowledge
 remove(T) :-
 	functor(T, N, A),
-	dynamic(N/A),
- 	retractall(T).
+	(dynamic(N/A)),
+ 	retractall(T),
+ 	functor(Ts, N, A),
+ 	findall(_, Ts, L),
+ 	(length(L, 0) -> retract(record(N, A)); true).
 
 %% erase database
-erase.
+removeFacts([]).
+removeFacts([H|T]) :-
+	H = [X, Y],
+	abolish(X/Y),
+	removeFacts(T),
+	!.
+
+erase :-
+	findall([X,Y], record(X,Y), L),
+	removeFacts(L),
+	abolish(record/2),
+	(dynamic(record/2)).
 
 %% helper predicate - required to interpret the rules
-distinct(X,Y) :- X \= Y.
+distinct(X,Y) :- 
+	X \= Y.
