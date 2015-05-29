@@ -70,7 +70,7 @@ backupState :-
 %% reverts to the backed-up state
 revertState :-
     db:remove(true(_)),
-    forall(state_bkpState(T), db:add(true(T))).
+    forall(db:state_bkpState(T), db:add(true(T))).
 
 %% adds player's moves to the db
 setMove(Role, Move) :- db:add(does(Role, Move)).

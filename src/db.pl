@@ -5,6 +5,11 @@
  	erase/1
 ]).
 :- dynamic(record/2).
+:- dynamic(does/2).
+:- dynamic(game_play_clock/1).
+:- dynamic(game_start_clock/1).
+:- dynamic(game_game_id/1).
+:- dynamic(game_role/1).
 
 %% helper functions for buidling knowledge representation
 %% add term to knowledge

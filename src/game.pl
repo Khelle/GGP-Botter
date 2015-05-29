@@ -18,7 +18,7 @@
 :- use_module(db).
 :- use_module(state).
 
-findGameId(GameId) :- db:geme_game_id(GameId).
+findGameId(GameId) :- db:game_game_id(GameId).
 
 findMyRole(Role) :- db:game_role(Role).
 

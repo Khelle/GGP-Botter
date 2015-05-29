@@ -3,8 +3,6 @@
 	testRules/0
 ]).
 
-:- use_module(library(unix)).
-
 :- use_module(db).
 :- use_module(gdlParser).
 :- use_module(library(debug)).
