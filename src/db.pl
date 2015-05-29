@@ -10,6 +10,7 @@
 :- dynamic(game_start_clock/1).
 :- dynamic(game_game_id/1).
 :- dynamic(game_role/1).
+:- dynamic(state_bkpState/1).
 
 %% helper functions for buidling knowledge representation
 %% add term to knowledge
@@ -35,7 +36,7 @@ remove(T) :-
  	retractall(T),
  	functor(Ts, N, A),
  	findall(_, Ts, L),
- 	(length(L, 0) -> (retract(record(N, A)) -> !,true); true).
+ 	(length(L, 0) -> (retract(record(N, A)) -> !,true;true); true).
 
 %% erase database
 removeFacts([]).
