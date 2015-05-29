@@ -17,6 +17,7 @@ save(Rules) :-
 	maplist(strToTerm, L, TermRules),
 	db:addList(TermRules).
 
+
 %% loads test rules into db
 testRules :-
 	gdlParser:testParse(StringRules),

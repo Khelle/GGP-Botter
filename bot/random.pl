@@ -8,5 +8,6 @@
 play(Played) :-
     game:findMyRole(Role),
     game:findCurrentState(State),
+    debug(request, 'Current state:~n~p', [State]),
     game:findFirstLegal(Role, State, Played);
     Played = 'nil'.

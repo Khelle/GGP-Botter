@@ -19,11 +19,13 @@ handleStart(GameId, Role, Rules, StartClock, PlayClock) :-
 handlePlay(_, Moves, Played) :-
     debug(request, 'Handle play', []),
     state:compute(Moves),
-    bot:play(Played).
-    %% bot:play(Moved),
-    %% Moved =.. List,
-    %% atomic_list_concat(List, ' ', L1),
-    %% atom_concat('( ', L1, L2), atom_concat(L2, ' )', Played).
+    %% bot:play(P),
+    bot:play(Moved),
+    Moved =.. List,
+    (length(List, 1) ->
+        Played = Moved;
+        atomic_list_concat(List, ' ', L1),
+        atom_concat('( ', L1, L2), atom_concat(L2, ' )', Played)).
 
 setGameInfo(GameId, Role, StartClock, PlayClock) :-
     db:add(game:game_id(GameId)),

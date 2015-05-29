@@ -56,6 +56,7 @@ findAllLegal(Role, State, Actions) :- callWithState(State, setof(Action, db:lega
 findNext(Roles, Moves, State, Next) :- callWithState(State, findNextLoop(Roles, Moves, Next)).
 findNextLoop([], [], Next) :- setof(P, db:next(P), Next).
 findNextLoop([R|Roles], [M|Moves], Next) :-
+    debug(request, 'Roles: ~p~nMoves: ~p', [[R|Roles], [M|Moves]]),
     state:setMove(R, M),
     findNextLoop(Roles, Moves, Next),
     state:clearMoves(R).
