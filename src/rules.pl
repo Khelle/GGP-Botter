@@ -22,6 +22,14 @@ testRules :-
 	maplist(strToTerm, StringRules, TermRules),
 	db:addList(TermRules).
 
+loadTestGame :-
+	[game], [state], [botLoader],
+	rules:loadRulesFile('../CellPuzzle.pl'),
+	botLoader:load('bot', 'random'),
+	state:setInitial,
+	findRoles([R]),
+	db:add(game_role(R)).
+
 %% load rules from specified file
 loadRulesFile(File) :-
 	readFile(File, Rules),
