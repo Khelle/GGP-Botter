@@ -31,8 +31,12 @@ handleRequest(['PLAY', GameId, Moves], Response) :-
 	requestHandler:handlePlay(GameId, Moves, Played),
 	debug(request, 'Played:~n~p', [Played]),
 	Response = Played.
-handleRequest(['STOP'|_], Response) :- Response = 'ready'.
-handleRequest(['ABORT'|_], Response) :- Response = 'aborted'.
+handleRequest(['STOP', GameId, Move], Response) :-
+	requestHandler:handleStop(GameId, Move),
+	Response = 'ready'.
+handleRequest(['ABORT', GameId], Response) :-
+	requestHandler:handleAbort(GameId),
+	Response = 'aborted'.
 
 % Do we want to handle this case?
 handleRequest(['PREVIEW'|_], Response) :- Response = 'done'.

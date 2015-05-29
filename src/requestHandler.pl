@@ -9,6 +9,7 @@
 :- use_module(rules).
 :- use_module(state).
 :- use_module(game).
+:- use_module(logger).
 :- use_module(library(debug)).
 
 handleStart(GameId, Role, Rules, StartClock, PlayClock) :-

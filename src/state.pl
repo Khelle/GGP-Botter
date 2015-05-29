@@ -50,6 +50,8 @@ prepareMove(In, Out) :-
 
 saveState(State) :-
     logger:log('states', State),
+    %% bagof(X, db:record(X), Db),
+    %% logger:log('db', Db),
     setState(State),
     backupState.
 
