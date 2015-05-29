@@ -11,7 +11,6 @@
 handleStart(GameId, Role, Rules, StartClock, PlayClock) :-
     debug(request, 'Handle start', []),
     setGameInfo(GameId, Role, StartClock, PlayClock),
-    %% debug(request, 'Rules: ~n~p', [Rules]),
     rules:save(Rules),
     state:setInitial,
     debug(request, 'Set initial state', []).
@@ -19,7 +18,6 @@ handleStart(GameId, Role, Rules, StartClock, PlayClock) :-
 handlePlay(_, Moves, Played) :-
     debug(request, 'Handle play', []),
     state:compute(Moves),
-    %% bot:play(P),
     bot:play(Moved),
     Moved =.. List,
     (length(List, 1) ->

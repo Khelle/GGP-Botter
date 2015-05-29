@@ -15,8 +15,8 @@ save(Rules) :-
 	split_string(StringRules, "\n", "", R),
 	gdlParser:gdlPrefixLinesToInfixLines(R, L),
 	maplist(strToTerm, L, TermRules),
-	db:addList(TermRules).
-
+	db:addList(TermRules),
+	logger:log('rules', L, write).
 
 %% loads test rules into db
 testRules :-

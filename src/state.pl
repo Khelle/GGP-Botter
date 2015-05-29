@@ -11,23 +11,32 @@
 :- use_module(db).
 :- use_module(game).
 :- use_module(gdlParser).
+:- use_module(logger).
 
 :- use_module(library(debug)).
 
 %% sets initial state
 setInitial :-
     game:findInitialState(State),
-    setState(State).
+    logger:log('states', ['Initializing...']),
+    saveState(State).
 
 %% computes new state basing on moves performed by players
-compute('NIL').
+compute('NIL') :-
+    !,
+    debug(request, 'Received moves: ~p', ['NIL']),
+    logger:log('states', ['Received moves:'|['NIL']]).
 compute(Moves) :-
+    !,
+    logger:log('states', ['Computing...']),
     parseMoves(Moves, MovesList),
     debug(request, 'Received moves: ~p', [MovesList]),
+    logger:log('states', ['Received moves:'|MovesList]),
+    %% logger:log('states', MovesList),
     game:findCurrentState(CurrentState),
     game:findRoles(Roles),
     game:findNext(Roles, MovesList, CurrentState, NextState),
-    setState(NextState),
+    saveState(NextState),
     debug(request, 'Computed new state...', []).
 
 parseMoves(InfixMoves, MovesList) :-
@@ -40,11 +49,15 @@ prepareMove(In, Out) :-
     split_string(In, "", ".", [Dotless]),
     atom_string(Out, Dotless).
 
+saveState(State) :-
+    logger:log('states', State),
+    setState(State),
+    backupState.
+
 %% saves and backups the new state in db
 setState(State) :-
     db:remove(true(_)),
-    setStateLoop(State),
-    backupState.
+    setStateLoop(State).
 setStateLoop([]).
 setStateLoop([P|Propositions]) :-
     db:add(true(P)),

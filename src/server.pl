@@ -20,6 +20,7 @@ start :-
 	parameters:parse,
 	parameters:params(Port, BotFile, BotDir),
 	botLoader:load(BotDir, BotFile),
+	logger:log('states', ['New game'], write),
 	runServer(Port).
 
 %% Action handlers
