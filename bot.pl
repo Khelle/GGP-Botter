@@ -1,0 +1,11 @@
+#!/usr/bin/swipl -f -q
+
+:- cd('src').
+:- initialization run.
+
+:- use_module(server).
+
+run :-
+    current_prolog_flag(argv, [Port, Bot]),
+    atom_number(Port, NPort),
+    server:start(NPort, Bot).

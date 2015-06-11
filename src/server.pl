@@ -16,10 +16,12 @@
 
 %% Server init - entry point to application
 start(Port, Bot) :-
+	%% tspy(game:findAllLegal/3),
 	%% debug(request),
 	parameters:parse,
 	parameters:params(BotDir),
 	botLoader:load(BotDir, Bot),
+	assertz(port(Port)),
 	runServer(Port).
 
 %% Action handlers
@@ -30,6 +32,9 @@ handleRequest(['START', GameId, Role, Rules, StartClock, PlayClock], Response) :
 handleRequest(['PLAY', GameId, Moves], Response) :-
 	requestHandler:handlePlay(GameId, Moves, Played),
 	debug(request, 'Played:~n~p', [Played]),
+	port(Port),
+	logger:log(Port, ['Received moves:', Moves]),
+	logger:log(Port, ['Played:', Played]),
 	Response = Played.
 handleRequest(['STOP', GameId, Move], Response) :-
 	requestHandler:handleStop(GameId, Move),
